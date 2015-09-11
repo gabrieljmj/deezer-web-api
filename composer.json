@@ -1,0 +1,24 @@
+{
+    "name": "gabrieljmj/deezer-web-api",
+    "description": "Deezer Web API with PHP",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "GabrielJMJ",
+            "homepage": "http://github.com/gabrieljmj"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "guzzlehttp/guzzle": "^6.0"  
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "DeezerWebApi\\": "src/DeezerWebApi/",
+            "Test\\DeezerWebApi\\": "tests/DeezerWebApi/"
+        }
+    }
+}
