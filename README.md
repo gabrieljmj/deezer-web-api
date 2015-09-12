@@ -1,6 +1,6 @@
 DeezerWebApi
 ============
-[![Build Status](https://travis-ci.org/GabrielJMJ/deezer-web-api.svg)](https://travis-ci.org/GabrielJMJ/deezer-web-api) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/gabrieljmj/deezer-web-api.svg)](https://scrutinizer-ci.com/g/GabrielJMJ/deezer-web-api/?branch=master) [![](https://img.shields.io/packagist/v/gabrieljmj/deezer-web-api.svg)]https://packagist.org/packages/gabrieljmj/deezer-web-api)
+[![Build Status](https://travis-ci.org/GabrielJMJ/deezer-web-api.svg)](https://travis-ci.org/GabrielJMJ/deezer-web-api) [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/gabrieljmj/deezer-web-api.svg)](https://scrutinizer-ci.com/g/GabrielJMJ/deezer-web-api/?branch=master) [![](https://img.shields.io/packagist/v/gabrieljmj/deezer-web-api.svg)](https://packagist.org/packages/gabrieljmj/deezer-web-api)
 
 Deezer Web API with PHP.
 
