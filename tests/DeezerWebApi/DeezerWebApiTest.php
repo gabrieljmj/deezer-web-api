@@ -1,7 +1,7 @@
 <?php
 namespace Test\DeezerWebApi;
 
-use DeezerApi\DeezerWebApi;
+use DeezerWebApi\DeezerWebApi;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\HandlerStack;
@@ -57,7 +57,8 @@ class DeezerWebApiTest extends \PHPUnit_Framework_TestCase
             $expectedStatus,
             $expectedResponse
         );
-        $deezer = new DeezerWebApi($this->accessToken, $mockedClient);
+        $deezer = new DeezerWebApi($mockedClient);
+        $deezer->setAccessToken($this->accessToken);
         
         $response = $deezer->get($uri);
         
@@ -82,60 +83,88 @@ class DeezerWebApiTest extends \PHPUnit_Framework_TestCase
             $expectedStatus,
             $expectedResponse
         );
-        $deezer = new DeezerWebApi($this->accessToken, $mockedClient);
+        $deezer = new DeezerWebApi($mockedClient);
+        $deezer->setAccessToken($this->accessToken);
         
         $response = $deezer->post($uri, $params);
         
         $this->assertEquals(json_decode($expectedResponse), $response);
     }
     
-    public function testGetRequestWithStatusDifferentOf200()
+    public function testGetRequestWithNoAccesstokenSettedOnResourceThatDoesNotNeedIt()
     {
-        $expectedStatus = 404;
+        $expectedStatus = 200;
         $expectedResponse = '{
-          "error": {
-            "type": "DataException",
-            "message": "no data",
-            "code": 800
-          }
+          "data": [
+            {
+              "id": "88486011",
+              "readable": true,
+              "title": "My House",
+              "title_short": "My House",
+              "title_version": "",
+              "link": "http://www.deezer.com/track/88486011",
+              "duration": "242",
+              "rank": "818376",
+              "explicit_lyrics": false,
+              "preview": "http://cdn-preview-c.deezer.com/stream/cbc5964dfe7527d63ef33e90060abfca-4.mp3",
+              "artist": {
+                "id": "5979468",
+                "name": "PVRIS",
+                "link": "http://www.deezer.com/artist/5979468",
+                "picture": "https://api.deezer.com/artist/5979468/image",
+                "picture_small": "https://cdns-images.deezer.com/images/artist/57c85633a967775a42ec22c2a7a406ba/56x56-000000-80-0-0.jpg",
+                "picture_medium": "https://cdns-images.deezer.com/images/artist/57c85633a967775a42ec22c2a7a406ba/250x250-000000-80-0-0.jpg",
+                "picture_big": "https://cdns-images.deezer.com/images/artist/57c85633a967775a42ec22c2a7a406ba/500x500-000000-80-0-0.jpg",
+                "tracklist": "https://api.deezer.com/artist/5979468/top?limit=50",
+                "type": "artist"
+              },
+              "album": {
+                "id": "8940141",
+                "title": "White Noise",
+                "cover": "https://api.deezer.com/album/8940141/image",
+                "cover_small": "https://cdns-images.deezer.com/images/cover/0461c973bf377a036a851f560bcbe202/56x56-000000-80-0-0.jpg",
+                "cover_medium": "https://cdns-images.deezer.com/images/cover/0461c973bf377a036a851f560bcbe202/250x250-000000-80-0-0.jpg",
+                "cover_big": "https://cdns-images.deezer.com/images/cover/0461c973bf377a036a851f560bcbe202/500x500-000000-80-0-0.jpg",
+                "tracklist": "https://api.deezer.com/album/8940141/tracks",
+                "type": "album"
+              },
+              "type": "track"
+            }
+          ],
+          "total": 1
         }';
-        $uri = '/playlist/INVALID_PLAYLIST';
+        $uri = '/search/track';
+        $params = ['q' => 'pvris my house'];
         $mockedClient = $this->mockClient(
             'GET',
             self::API_URL . $uri,
-            ['query' => http_build_query(['access_token' => $this->accessToken->getAccessToken()])],
+            ['query' => http_build_query($params)],
             $expectedStatus,
             $expectedResponse
         );
-        $deezer = new DeezerWebApi($this->accessToken, $mockedClient);
+        $deezer = new DeezerWebApi($mockedClient);
         
-        $response = $deezer->get($uri);
+        $response = $deezer->get($uri, $params);
         
         $this->assertEquals(json_decode($expectedResponse), $response);
     }
     
-    public function testPostRequestWithStatusDifferentOf200()
+    public function testGetRequestWithNoAccessTokenSettedOnResourceThatNeedIt()
     {
-        $expectedStatus = 403;
-        $expectedResponse = '{
-          "error": {
-            "type": "OAuthException",
-            "message": "Invalid OAuth access token.",
-            "code": 300
-          }
-        }';
-        $uri = '/user/me/playlists';
-        $params = ['title' => 'PLAYLIST_TITLE'];
+        $expectedStatus = 200;
+        $expectedResponse = '{"error":{"type":"OAuthException","message":"An active access token must be used to query information about the current user","code":200}}';
+        $uri = '/user/me';
+        $params = ['q' => 'pvris my house'];
         $mockedClient = $this->mockClient(
-            'POST',
+            'GET',
             self::API_URL . $uri,
-            ['query' => http_build_query(array_merge($params, ['access_token' => $this->accessToken->getAccessToken()]))],
+            ['query' => http_build_query($params)],
             $expectedStatus,
             $expectedResponse
         );
-        $deezer = new DeezerWebApi($this->accessToken, $mockedClient);
+        $deezer = new DeezerWebApi($mockedClient);
         
-        $response = $deezer->post($uri, $params);
+        $response = $deezer->get($uri, $params);
         
         $this->assertEquals(json_decode($expectedResponse), $response);
     }

@@ -31,16 +31,16 @@ $code = $_GET['code'];
 $accessToken = $session->getAccessToken($code);
 $deezer = new DeezerWebApi($accessToken);
 
-$me = $deezer->get('users/me');
+$me = $deezer->get('user/me');
 ```
 
 ### Methods
 #### ```get($resource[, array $params = []])```
 ```php
-$me = $deezer->get('users/me');
+$me = $deezer->get('user/me');
 ```
 
 #### ```post($resource[, array $params = []])```
 ```php
-$response = $deezer->post('users/me/playlists', ['title' => 'PLAYLIST_TITLE']);
+$response = $deezer->post('user/me/playlists', ['title' => 'PLAYLIST_TITLE']);
 ```

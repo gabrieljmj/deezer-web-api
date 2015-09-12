@@ -33,13 +33,25 @@ class DeezerWebApi
     private $accessToken;
     
     /**
-     * @param \DeezerWebApi\AccessToken        $token
      * @param \GuzzleHttp\ClientInterface|null $client
+     * @param \DeezerWebApi\AccessToken|null   $token
      */
-    public function __construct(AccessToken $token, ClientInterface $client = null)
+    public function __construct(ClientInterface $client = null, AccessToken $token = null)
+    {
+        $this->client = $client ?: new Client();
+    }
+    
+    /**
+     * Sets the access token
+     * 
+     * @param \DeezerWebApi\AccessToken
+     * 
+     * @return self
+     */
+    public function setAccessToken(AccessToken $token)
     {
         $this->accessToken = $token;
-        $this->client = $client ?: new Client();
+        return $this;
     }
     
     /**
@@ -79,8 +91,9 @@ class DeezerWebApi
      */
     public function request($method, $resource, array $params = [])
     {
-        $params['access_token'] = $this->accessToken->getAccessToken();
+        !$this->accessToken ?: $params['access_token'] = $this->accessToken->getAccessToken();
         $response = $this->client->request($method, self::API_URL . $resource, ['query' => http_build_query($params)]);
+        
         return json_decode($response->getBody());
     }
 }
