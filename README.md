@@ -31,7 +31,8 @@ if (empty($_GET['code'])) {
 
 $code = $_GET['code'];
 $accessToken = $session->getAccessToken($code);
-$deezer = new DeezerWebApi($accessToken);
+$deezer = new DeezerWebApi();
+$deezer->setAccessToken($accessToken); // Or new DeezerWebApi(null, $accessToken);
 
 $me = $deezer->get('user/me');
 ```

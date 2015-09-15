@@ -39,6 +39,7 @@ class DeezerWebApi
     public function __construct(ClientInterface $client = null, AccessToken $token = null)
     {
         $this->client = $client ?: new Client();
+        null === $token ?: $this->accessToken = $token;
     }
     
     /**
